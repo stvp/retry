@@ -5,10 +5,10 @@ import (
 	"time"
 )
 
-// Do runs a function up to maxTries number of times with an exponential
-// back-off. It returns when: the function doesn't return an error, the
-// function returns an error after maxTries number of attempts, or immediately
-// if the function returns a non-temporary net.Error.
+// Exponential calls fn up to maxTries number of times with an exponential
+// back-off until fn returns nil. If fn returns a permanent net.Error,
+// Exponential returns early. Exponential returns the last error (or nil, if fn
+// didn't return an error).
 func Exponential(maxTries int, sleep time.Duration, fn func() error) (err error) {
 	for try := 0; try < maxTries; try++ {
 		err = fn()
